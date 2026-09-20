@@ -1,0 +1,6 @@
+{
+  "name": "Al Faiz Noor UL Quran Academy",
+  "description": "Al Faiz Noor UL Quran Academy (الفائز نور القرآن اکیڈمی) – Premium Islamic educational academy offering online Quran reading, Tajweed, Hifz, basic Islamic education, and character building with dedicated classes for children and women.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
