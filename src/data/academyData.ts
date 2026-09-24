@@ -24,13 +24,13 @@ export const ACADEMY_CONFIG = {
   
   // Centralized WhatsApp configuration:
   // Note: Phone number is kept strictly internal for direct WhatsApp links and never displayed in visible UI.
-  whatsappNumber: '+923710156332',
+  whatsappNumber: '+923155306128',
   whatsappDisplay: 'Official WhatsApp Support',
   whatsappLabel: 'Official WhatsApp Support',
   whatsappAction: 'Click to start WhatsApp chat',
   whatsappTooltip: 'Click to start a private WhatsApp conversation',
   whatsappAccessibleLabel: 'Open WhatsApp Support',
-  whatsappUrl: 'https://wa.me/923710156332',
+  whatsappUrl: 'https://wa.me/923155306128',
   
   // Official Facebook page integration
   facebookUrl: 'https://www.facebook.com/profile.php?id=61581930617232',
@@ -52,7 +52,7 @@ export const ACADEMY_CONFIG = {
   
   // Helper to generate pre-filled WhatsApp links with student & course details
   getWhatsAppUrl(topic?: string, studentName?: string): string {
-    const cleanNumber = '923710156332';
+    const cleanNumber = '923155306128';
     let msg = `Assalam-o-Alaikum, I have submitted an admission inquiry at Al Faiz Noor UL Quran Academy.`;
     if (studentName) {
       msg = `Assalam-o-Alaikum, I have submitted an admission inquiry at Al Faiz Noor UL Quran Academy. My name is ${studentName}`;
