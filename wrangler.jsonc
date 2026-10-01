@@ -1,8 +1,17 @@
 {
   "name": "alfaiz2",
   "compatibility_date": "2026-09-20",
+  "main": "worker/index.ts",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "not_found_handling": "single-page-application"
-  }
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "alfaiz-admissions",
+      "database_id": "8cd92c4c-e182-445f-8ae4-1282729ca8d5"
+    }
+  ]
 }
