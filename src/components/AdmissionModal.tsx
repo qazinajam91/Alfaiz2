@@ -3,7 +3,7 @@ import { X, GraduationCap, CheckCircle2, MessageCircle, Send, Loader2 } from 'lu
 import { ACADEMY_CONFIG, ACADEMY_SERVICES } from '../data/academyData';
 import { IslamicStarIcon } from './IslamicPattern';
 import { useLanguage } from '../i18n/LanguageContext';
-import { sendAdmissionInquiryEmail } from '../services/emailService';
+import { sendAdmissionInquiryEmail, saveEnrollmentRecord } from '../services/emailService';
 import { InquiryFormData } from '../types';
 
 interface AdmissionModalProps {
@@ -52,7 +52,10 @@ export const AdmissionModal: React.FC<AdmissionModalProps> = ({
     };
 
     try {
-      await sendAdmissionInquiryEmail(inquiryPayload);
+      await Promise.all([
+        sendAdmissionInquiryEmail(inquiryPayload),
+        saveEnrollmentRecord(inquiryPayload),
+      ]);
       setIsDone(true);
     } catch {
       setIsDone(true);
