@@ -98,3 +98,14 @@ export async function sendAdmissionInquiryEmail(data: InquiryFormData): Promise<
     };
   }
 }
+export async function saveEnrollmentRecord(data: InquiryFormData): Promise<void> {
+  try {
+    await fetch('/api/enroll', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+  } catch (error) {
+    console.error('Error saving enrollment record:', error);
+  }
+}
