@@ -2,32 +2,303 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Admin - Enrollments</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin — Al-Faiz Academy</title>
 <style>
-  body { font-family: sans-serif; background:#0b1f1a; color:#eee; padding:20px; }
-  input, button { padding:10px; font-size:16px; margin:5px 0; }
-  table { width:100%; border-collapse: collapse; margin-top:20px; }
-  th, td { border:1px solid #444; padding:8px; text-align:left; font-size:14px; }
-  th { background:#123; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: radial-gradient(circle at top, #0a3d31, #021813 70%);
+    color: #eee;
+    min-height: 100vh;
+    padding: 24px 16px;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+
+  .header { text-align: center; margin-bottom: 32px; }
+  .header .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(212,175,55,0.12);
+    border: 1px solid rgba(212,175,55,0.4);
+    color: #fae29c;
+    font-size: 0.7rem;
+    padding: 5px 14px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+  }
+  .header h1 {
+    font-size: 1.6rem;
+    background: linear-gradient(90deg, #fae29c, #d4af37, #fae29c);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 800;
+  }
+  .header p { color: #8fa89f; font-size: 0.85rem; margin-top: 4px; }
+
+  .login-card {
+    max-width: 400px;
+    margin: 50px auto;
+    background: linear-gradient(160deg, #0a4236, #042720 70%);
+    border: 1px solid rgba(212,175,55,0.3);
+    border-radius: 24px;
+    padding: 36px 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03);
+    text-align: center;
+  }
+  .login-icon {
+    width: 56px; height: 56px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #fae29c, #d4af37);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+  }
+  .login-card h2 { color: #fff; font-size: 1.1rem; margin-bottom: 6px; }
+  .login-card p { color: #8fa89f; font-size: 0.82rem; margin-bottom: 20px; }
+
+  input[type="password"] {
+    width: 100%;
+    padding: 13px 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(212,175,55,0.35);
+    background: #031d17;
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input[type="password"]:focus { border-color: #d4af37; box-shadow: 0 0 0 3px rgba(212,175,55,0.15); }
+
+  button {
+    width: 100%;
+    padding: 13px;
+    border-radius: 14px;
+    border: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    background: linear-gradient(90deg, #fae29c, #d4af37, #c59b27);
+    color: #031d17;
+    transition: filter 0.2s, transform 0.1s;
+  }
+  button:hover { filter: brightness(1.12); }
+  button:active { transform: scale(0.98); }
+
+  .error {
+    color: #ff9b9b;
+    font-size: 0.82rem;
+    margin-top: 12px;
+    background: rgba(255,0,0,0.08);
+    border-radius: 10px;
+    padding: 8px;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: linear-gradient(160deg, rgba(212,175,55,0.1), rgba(212,175,55,0.02));
+    border: 1px solid rgba(212,175,55,0.3);
+    border-radius: 18px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute; top: -20px; right: -20px;
+    width: 70px; height: 70px;
+    background: radial-gradient(circle, rgba(212,175,55,0.25), transparent 70%);
+  }
+  .stat-card .num {
+    font-size: 1.8rem; font-weight: 800;
+    background: linear-gradient(90deg, #fae29c, #d4af37);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .stat-card .label {
+    font-size: 0.7rem; color: #8fa89f;
+    text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px;
+  }
+
+  .table-card {
+    background: linear-gradient(160deg, #0a3d31, #042720);
+    border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+  }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+  thead th {
+    background: rgba(212,175,55,0.1);
+    color: #fae29c;
+    text-transform: uppercase;
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid rgba(212,175,55,0.25);
+  }
+  tbody tr { border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.15s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(212,175,55,0.06); }
+  td.notes { white-space: normal; max-width: 220px; color: #b9ccc5; }
+  td.name { font-weight: 600; color: #fff; }
+
+  .pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+  .pill.female { background: rgba(244,114,182,0.15); color: #f9a8d4; }
+  .pill.male { background: rgba(96,165,250,0.15); color: #93c5fd; }
+
+  .footer-row {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 18px;
+  }
+  .logout {
+    color: #8fa89f; font-size: 0.8rem; cursor: pointer; text-decoration: underline;
+  }
+  .empty { text-align: center; padding: 50px 20px; color: #8fa89f; }
 </style>
 </head>
 <body>
-  <h2>Al-Faiz Academy — Admissions</h2>
-  <input type="password" id="pw" placeholder="Admin password" />
-  <button onclick="load()">View</button>
-  <div id="result"></div>
+  <div class="wrap">
+    <div class="header">
+      <div class="badge">🔒 Admin Access</div>
+      <h1>Al-Faiz Noor-ul-Quran Academy</h1>
+      <p>Admissions Management Dashboard</p>
+    </div>
+
+    <div id="loginView" class="login-card">
+      <div class="login-icon">🔑</div>
+      <h2>Admin Login</h2>
+      <p>Enter your password to view admissions</p>
+      <input type="password" id="pw" placeholder="Admin password" />
+      <button onclick="load()">View Admissions</button>
+      <div id="loginError" class="error" style="display:none;"></div>
+    </div>
+
+    <div id="dashView" style="display:none;">
+      <div class="stats" id="statsRow"></div>
+      <div class="table-card">
+        <div class="table-wrap">
+          <table id="dataTable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Course</th>
+                <th>Phone</th>
+                <th>Notes</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="footer-row">
+        <span></span>
+        <span class="logout" onclick="logout()">Log out</span>
+      </div>
+    </div>
+  </div>
+
 <script>
 async function load() {
   const pw = document.getElementById('pw').value;
-  const res = await fetch('/api/admissions?password=' + encodeURIComponent(pw));
-  if (!res.ok) { document.getElementById('result').innerHTML = '<p style="color:red">Wrong password</p>'; return; }
-  const data = await res.json();
-  let html = '<table><tr><th>Name</th><th>Age</th><th>Gender</th><th>Course</th><th>Phone</th><th>Notes</th><th>Date</th></tr>';
-  for (const r of data.results) {
-    html += `<tr><td>${r.full_name}</td><td>${r.student_age}</td><td>${r.gender}</td><td>${r.course_interest}</td><td>${r.phone}</td><td>${r.notes||''}</td><td>${r.created_at}</td></tr>`;
+  const errorBox = document.getElementById('loginError');
+  errorBox.style.display = 'none';
+
+  if (!pw) {
+    errorBox.textContent = 'Please enter the password.';
+    errorBox.style.display = 'block';
+    return;
   }
-  html += '</table>';
-  document.getElementById('result').innerHTML = html;
+
+  try {
+    const res = await fetch('/api/admissions?password=' + encodeURIComponent(pw));
+    if (!res.ok) {
+      errorBox.textContent = 'Wrong password — please try again.';
+      errorBox.style.display = 'block';
+      return;
+    }
+    const data = await res.json();
+    renderDashboard(data.results || []);
+  } catch (e) {
+    errorBox.textContent = 'Something went wrong. Please try again.';
+    errorBox.style.display = 'block';
+  }
+}
+
+function renderDashboard(rows) {
+  document.getElementById('loginView').style.display = 'none';
+  document.getElementById('dashView').style.display = 'block';
+
+  const statsRow = document.getElementById('statsRow');
+  const total = rows.length;
+  const courseCounts = {};
+  rows.forEach(r => { courseCounts[r.course_interest] = (courseCounts[r.course_interest] || 0) + 1; });
+  const topCourse = Object.keys(courseCounts).sort((a,b) => courseCounts[b]-courseCounts[a])[0] || '—';
+  const femaleCount = rows.filter(r => r.gender === 'female').length;
+
+  statsRow.innerHTML = `
+    <div class="stat-card"><div class="num">${total}</div><div class="label">Total Enrollments</div></div>
+    <div class="stat-card"><div class="num">${femaleCount}</div><div class="label">Sisters / Girls</div></div>
+    <div class="stat-card"><div class="num" style="font-size:1.1rem">${escapeHtml(topCourse)}</div><div class="label">Top Course</div></div>
+  `;
+
+  const tbody = document.getElementById('tableBody');
+  if (rows.length === 0) {
+    document.querySelector('.table-card').innerHTML = '<div class="empty">No enrollments yet.</div>';
+    return;
+  }
+
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td class="name">${escapeHtml(r.full_name)}</td>
+      <td>${escapeHtml(r.student_age)}</td>
+      <td><span class="pill ${r.gender === 'female' ? 'female' : 'male'}">${escapeHtml(r.gender)}</span></td>
+      <td>${escapeHtml(r.course_interest)}</td>
+      <td>${escapeHtml(r.phone)}</td>
+      <td class="notes">${escapeHtml(r.notes || '—')}</td>
+      <td>${formatDate(r.created_at)}</td>
+    </tr>
+  `).join('');
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function formatDate(iso) {
+  try {
+    const d = new Date(iso);
+    return d.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+  } catch { return iso; }
+}
+
+function logout() {
+  document.getElementById('pw').value = '';
+  document.getElementById('dashView').style.display = 'none';
+  document.getElementById('loginView').style.display = 'block';
 }
 </script>
 </body>
