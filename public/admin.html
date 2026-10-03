@@ -13,7 +13,7 @@
     min-height: 100vh;
     padding: 24px 16px;
   }
-  .wrap { max-width: 1100px; margin: 0 auto; }
+  .wrap { max-width: 1200px; margin: 0 auto; }
 
   .header { text-align: center; margin-bottom: 32px; }
   .header .badge {
@@ -47,13 +47,15 @@
   .login-card h2 { color: #fff; font-size: 1.1rem; margin-bottom: 6px; }
   .login-card p { color: #8fa89f; font-size: 0.82rem; margin-bottom: 20px; }
 
-  input[type="password"] {
+  input[type="password"], input[type="text"] {
     width: 100%; padding: 13px 16px; border-radius: 14px;
     border: 1px solid rgba(212,175,55,0.35);
     background: #031d17; color: #fff; font-size: 1rem;
     margin-bottom: 14px; outline: none;
   }
-  input[type="password"]:focus { border-color: #d4af37; box-shadow: 0 0 0 3px rgba(212,175,55,0.15); }
+  input[type="password"]:focus, input[type="text"]:focus {
+    border-color: #d4af37; box-shadow: 0 0 0 3px rgba(212,175,55,0.15);
+  }
 
   button {
     padding: 13px; border-radius: 14px; border: none;
@@ -71,7 +73,7 @@
   }
 
   .stats {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 14px; margin-bottom: 20px;
   }
   .stat-card {
@@ -94,12 +96,18 @@
     text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px;
   }
 
-  .filters {
+  .toolbar {
     display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px;
   }
-  .filters select {
+  .toolbar .search-box { flex: 2; min-width: 200px; position: relative; }
+  .toolbar .search-box input { margin-bottom: 0; padding-left: 38px; }
+  .toolbar .search-box .icon {
+    position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+    color: #8fa89f; font-size: 0.9rem; pointer-events: none;
+  }
+  .toolbar select {
     flex: 1; min-width: 130px;
-    padding: 10px 12px; border-radius: 12px;
+    padding: 12px; border-radius: 14px;
     border: 1px solid rgba(212,175,55,0.3);
     background: #042720; color: #eee; font-size: 0.85rem;
   }
@@ -143,6 +151,13 @@
   .footer-row { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; }
   .logout { color: #8fa89f; font-size: 0.8rem; cursor: pointer; text-decoration: underline; }
   .empty { text-align: center; padding: 50px 20px; color: #8fa89f; }
+  .empty .big { font-size: 1rem; color: #fae29c; margin-bottom: 6px; }
+
+  @media (min-width: 900px) {
+    .wrap { padding: 0 20px; }
+    .header h1 { font-size: 2rem; }
+    .stats { grid-template-columns: repeat(4, 1fr); }
+  }
 </style>
 </head>
 <body>
@@ -165,7 +180,11 @@
     <div id="dashView" style="display:none;">
       <div class="stats" id="statsRow"></div>
 
-      <div class="filters">
+      <div class="toolbar">
+        <div class="search-box">
+          <span class="icon">🔍</span>
+          <input type="text" id="searchBox" placeholder="Search by name (English or Urdu)..." oninput="applyFilters()" />
+        </div>
         <select id="courseFilter" onchange="applyFilters()">
           <option value="">All Courses</option>
         </select>
@@ -254,12 +273,14 @@ function applyFilters() {
   const course = document.getElementById('courseFilter').value;
   const gender = document.getElementById('genderFilter').value;
   const status = document.getElementById('statusFilter').value;
+  const search = document.getElementById('searchBox').value.trim().toLowerCase();
 
   let filtered = allRows.filter(r => {
     if (course && r.course_interest !== course) return false;
     if (gender && r.gender !== gender) return false;
     const rowStatus = r.status || 'active';
     if (status && rowStatus !== status) return false;
+    if (search && !String(r.full_name || '').toLowerCase().includes(search)) return false;
     return true;
   });
 
@@ -286,7 +307,7 @@ function renderTable(rows) {
   document.getElementById('countLabel').textContent = `Showing ${rows.length} of ${allRows.length}`;
 
   if (rows.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="9"><div class="empty">No matching enrollments.</div></td></tr>';
+    tbody.innerHTML = `<tr><td colspan="9"><div class="empty"><div class="big">No results found</div>Try a different name or clear the filters.</div></td></tr>`;
     return;
   }
 
@@ -361,4 +382,4 @@ function logout() {
 }
 </script>
 </body>
- </html>
+         </html>
