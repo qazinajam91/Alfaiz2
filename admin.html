@@ -1,0 +1,498 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin Dashboard — Al-Faiz Academy</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #021813; color: #eee; min-height: 100vh;
+  }
+
+  /* ---------- Login ---------- */
+  .login-wrap {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle at top, #0a3d31, #021813 70%);
+    padding: 20px;
+  }
+  .login-card {
+    max-width: 400px; width: 100%;
+    background: linear-gradient(160deg, #0a4236, #042720 70%);
+    border: 1px solid rgba(212,175,55,0.3);
+    border-radius: 24px; padding: 36px 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    text-align: center;
+  }
+  .login-icon {
+    width: 60px; height: 60px; margin: 0 auto 16px; border-radius: 50%;
+    background: linear-gradient(135deg, #fae29c, #d4af37);
+    display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
+  }
+  .login-card h1 {
+    font-size: 1.2rem;
+    background: linear-gradient(90deg, #fae29c, #d4af37);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    margin-bottom: 4px;
+  }
+  .login-card p { color: #8fa89f; font-size: 0.82rem; margin-bottom: 22px; }
+  input[type="password"], input[type="text"] {
+    width: 100%; padding: 13px 16px; border-radius: 14px;
+    border: 1px solid rgba(212,175,55,0.35);
+    background: #031d17; color: #fff; font-size: 1rem;
+    margin-bottom: 14px; outline: none;
+  }
+  input:focus { border-color: #d4af37; box-shadow: 0 0 0 3px rgba(212,175,55,0.15); }
+  button {
+    padding: 13px; border-radius: 14px; border: none;
+    font-weight: 700; font-size: 0.9rem; cursor: pointer;
+    background: linear-gradient(90deg, #fae29c, #d4af37, #c59b27);
+    color: #031d17;
+  }
+  button.full { width: 100%; }
+  button:hover { filter: brightness(1.12); }
+  .error { color: #ff9b9b; font-size: 0.82rem; margin-top: 10px; background: rgba(255,0,0,0.08); border-radius: 10px; padding: 8px; }
+
+  /* ---------- App shell ---------- */
+  #app { display: none; }
+  .shell { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: 230px; flex-shrink: 0;
+    background: linear-gradient(180deg, #0a3d31, #021813);
+    border-right: 1px solid rgba(212,175,55,0.2);
+    padding: 24px 16px; position: sticky; top: 0; height: 100vh;
+  }
+  .brand { text-align: center; margin-bottom: 30px; }
+  .brand .moon { font-size: 1.6rem; }
+  .brand h2 {
+    font-size: 0.95rem; margin-top: 6px;
+    background: linear-gradient(90deg, #fae29c, #d4af37);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .brand p { color: #8fa89f; font-size: 0.65rem; margin-top: 2px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; border-radius: 12px; margin-bottom: 6px;
+    color: #c9d6d1; font-size: 0.85rem; cursor: pointer;
+    transition: background 0.15s;
+  }
+  .nav-item:hover { background: rgba(212,175,55,0.08); }
+  .nav-item.active { background: rgba(212,175,55,0.15); color: #fae29c; font-weight: 600; }
+  .nav-bottom { position: absolute; bottom: 24px; width: calc(100% - 32px); }
+
+  .main { flex: 1; padding: 28px 24px; overflow-x: hidden; }
+  .page-title { font-size: 1.3rem; color: #fff; margin-bottom: 4px; }
+  .page-sub { color: #8fa89f; font-size: 0.82rem; margin-bottom: 24px; }
+
+  .stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 14px; margin-bottom: 24px;
+  }
+  .stat-card {
+    background: linear-gradient(160deg, rgba(212,175,55,0.1), rgba(212,175,55,0.02));
+    border: 1px solid rgba(212,175,55,0.3);
+    border-radius: 18px; padding: 18px; position: relative; overflow: hidden;
+  }
+  .stat-card::before {
+    content: ''; position: absolute; top: -20px; right: -20px; width: 70px; height: 70px;
+    background: radial-gradient(circle, rgba(212,175,55,0.25), transparent 70%);
+  }
+  .stat-card .num {
+    font-size: 1.7rem; font-weight: 800;
+    background: linear-gradient(90deg, #fae29c, #d4af37);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .stat-card .label { font-size: 0.68rem; color: #8fa89f; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px; }
+
+  .charts-grid {
+    display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 24px;
+  }
+  .chart-card {
+    background: linear-gradient(160deg, #0a3d31, #042720);
+    border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 20px; padding: 20px;
+  }
+  .chart-card h3 { font-size: 0.9rem; color: #fae29c; margin-bottom: 14px; }
+  .chart-card canvas { max-height: 260px; }
+
+  .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+  .toolbar .search-box { flex: 2; min-width: 200px; position: relative; }
+  .toolbar .search-box input { margin-bottom: 0; padding-left: 38px; }
+  .toolbar .search-box .icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: #8fa89f; }
+  .toolbar select {
+    flex: 1; min-width: 120px; padding: 12px; border-radius: 14px;
+    border: 1px solid rgba(212,175,55,0.3); background: #042720; color: #eee; font-size: 0.85rem;
+  }
+  .add-btn { white-space: nowrap; }
+
+  .table-card {
+    background: linear-gradient(160deg, #0a3d31, #042720);
+    border: 1px solid rgba(212,175,55,0.25); border-radius: 20px; overflow: hidden;
+  }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 14px 16px; text-align: left; font-size: 0.8rem; white-space: nowrap; }
+  thead th {
+    background: rgba(212,175,55,0.1); color: #fae29c;
+    text-transform: uppercase; font-size: 0.64rem; letter-spacing: 0.05em;
+    border-bottom: 1px solid rgba(212,175,55,0.25);
+  }
+  tbody tr { border-bottom: 1px solid rgba(255,255,255,0.05); }
+  tbody tr:hover { background: rgba(212,175,55,0.06); }
+  td.notes { white-space: normal; max-width: 180px; color: #b9ccc5; }
+  td.name { font-weight: 600; color: #fff; }
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 0.7rem; font-weight: 600; cursor: pointer; border: none; }
+  .pill.female { background: rgba(244,114,182,0.15); color: #f9a8d4; }
+  .pill.male { background: rgba(96,165,250,0.15); color: #93c5fd; }
+  .pill.active { background: rgba(74,222,128,0.15); color: #86efac; }
+  .pill.inactive { background: rgba(156,163,175,0.2); color: #cbd5e1; }
+  .del-btn { background: rgba(255,80,80,0.12); color: #ff9b9b; border: 1px solid rgba(255,80,80,0.3); border-radius: 10px; padding: 6px 10px; font-size: 0.72rem; }
+
+  .empty { text-align: center; padding: 50px 20px; color: #8fa89f; }
+  .empty .big { font-size: 1rem; color: #fae29c; margin-bottom: 6px; }
+  .footer-row { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; color: #8fa89f; font-size: 0.78rem; }
+
+  /* Add modal */
+  .modal-bg {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+    align-items: center; justify-content: center; z-index: 50; padding: 16px;
+  }
+  .modal-bg.show { display: flex; }
+  .modal {
+    background: linear-gradient(160deg, #0a4236, #042720);
+    border: 1px solid rgba(212,175,55,0.3); border-radius: 20px;
+    padding: 24px; max-width: 420px; width: 100%; max-height: 90vh; overflow-y: auto;
+  }
+  .modal h3 { color: #fae29c; margin-bottom: 16px; }
+  .modal select { width: 100%; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 10px; }
+  .modal-actions button.secondary { background: rgba(255,255,255,0.08); color: #ccc; }
+
+  @media (max-width: 760px) {
+    .sidebar { position: fixed; z-index: 40; transform: translateX(-100%); transition: transform 0.2s; }
+    .sidebar.open { transform: translateX(0); }
+    .menu-btn { display: inline-flex !important; }
+  }
+  .menu-btn {
+    display: none; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 10px; background: rgba(212,175,55,0.15);
+    color: #fae29c; margin-bottom: 14px; cursor: pointer; border: none; font-size: 1rem;
+  }
+  @media (min-width: 900px) {
+    .charts-grid { grid-template-columns: 1.3fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="login-wrap" id="loginWrap">
+    <div class="login-card">
+      <div class="login-icon">🔑</div>
+      <h1>Al-Faiz Academy — Admin</h1>
+      <p>Enter your password to access the dashboard</p>
+      <input type="password" id="pw" placeholder="Admin password" />
+      <button class="full" onclick="login()">Log In</button>
+      <div id="loginError" class="error" style="display:none;"></div>
+    </div>
+  </div>
+
+  <div id="app">
+    <div class="shell">
+      <div class="sidebar" id="sidebar">
+        <div class="brand">
+          <div class="moon">🌙</div>
+          <h2>Al-Faiz Academy</h2>
+          <p>Admin Panel</p>
+        </div>
+        <div class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')">📊 Dashboard</div>
+        <div class="nav-item" data-page="admissions" onclick="showPage('admissions')">📝 Admissions</div>
+        <div class="nav-bottom">
+          <div class="nav-item" onclick="logout()">🚪 Log out</div>
+        </div>
+      </div>
+
+      <div class="main">
+        <button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
+        <!-- Dashboard Page -->
+        <div id="page-dashboard">
+          <div class="page-title">Dashboard</div>
+          <div class="page-sub">Overview of all admissions</div>
+          <div class="stats" id="statsRow"></div>
+          <div class="charts-grid">
+            <div class="chart-card"><h3>Enrollments by Course</h3><canvas id="courseChart"></canvas></div>
+            <div class="chart-card"><h3>Gender Split</h3><canvas id="genderChart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h3>Age Distribution</h3>
+            <canvas id="ageChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Admissions Page -->
+        <div id="page-admissions" style="display:none;">
+          <div class="page-title">Admissions</div>
+          <div class="page-sub">All enrollment requests</div>
+          <div class="toolbar">
+            <div class="search-box">
+              <span class="icon">🔍</span>
+              <input type="text" id="searchBox" placeholder="Search by name..." oninput="applyFilters()" />
+            </div>
+            <select id="courseFilter" onchange="applyFilters()"><option value="">All Courses</option></select>
+            <select id="genderFilter" onchange="applyFilters()">
+              <option value="">All Genders</option><option value="female">Female</option><option value="male">Male</option>
+            </select>
+            <select id="statusFilter" onchange="applyFilters()">
+              <option value="">All Status</option><option value="active">Active</option><option value="inactive">Inactive</option>
+            </select>
+            <button class="add-btn" onclick="openAddModal()">+ Add Admission</button>
+          </div>
+          <div class="table-card">
+            <div class="table-wrap">
+              <table>
+                <thead><tr>
+                  <th>Name</th><th>Age</th><th>Gender</th><th>Course</th><th>Phone</th>
+                  <th>Notes</th><th>Date</th><th>Status</th><th></th>
+                </tr></thead>
+                <tbody id="tableBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="footer-row"><span id="countLabel"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Admission Modal -->
+  <div class="modal-bg" id="addModal">
+    <div class="modal">
+      <h3>Add New Admission</h3>
+      <input type="text" id="addName" placeholder="Full name" />
+      <input type="text" id="addAge" placeholder="Age" />
+      <select id="addGender"><option value="female">Female</option><option value="male">Male</option></select>
+      <input type="text" id="addCourse" placeholder="Course name" />
+      <input type="text" id="addPhone" placeholder="Phone / WhatsApp" />
+      <input type="text" id="addNotes" placeholder="Notes (optional)" />
+      <div class="modal-actions">
+        <button class="secondary" onclick="closeAddModal()">Cancel</button>
+        <button onclick="submitAdd()">Save</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+let savedPw = localStorage.getItem('alfaiz_admin_pw') || '';
+let allRows = [];
+let courseChart, genderChart, ageChart;
+
+window.addEventListener('DOMContentLoaded', () => {
+  if (savedPw) tryLogin(savedPw, true);
+});
+
+async function login() {
+  const pw = document.getElementById('pw').value;
+  if (!pw) return showLoginError('Please enter the password.');
+  tryLogin(pw, false);
+}
+
+async function tryLogin(pw, silent) {
+  try {
+    const res = await fetch('/api/admissions?password=' + encodeURIComponent(pw));
+    if (!res.ok) {
+      localStorage.removeItem('alfaiz_admin_pw');
+      if (!silent) showLoginError('Wrong password — please try again.');
+      return;
+    }
+    const data = await res.json();
+    savedPw = pw;
+    localStorage.setItem('alfaiz_admin_pw', pw);
+    allRows = data.results || [];
+    document.getElementById('loginWrap').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    populateCourseFilter();
+    renderDashboard();
+    applyFilters();
+  } catch (e) {
+    if (!silent) showLoginError('Something went wrong.');
+  }
+}
+
+function showLoginError(msg) {
+  const box = document.getElementById('loginError');
+  box.textContent = msg; box.style.display = 'block';
+}
+
+function logout() {
+  localStorage.removeItem('alfaiz_admin_pw');
+  savedPw = ''; allRows = [];
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginWrap').style.display = 'flex';
+  document.getElementById('pw').value = '';
+}
+
+function showPage(page) {
+  document.getElementById('page-dashboard').style.display = page === 'dashboard' ? 'block' : 'none';
+  document.getElementById('page-admissions').style.display = page === 'admissions' ? 'block' : 'none';
+  document.querySelectorAll('.nav-item[data-page]').forEach(el => el.classList.toggle('active', el.dataset.page === page));
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+function populateCourseFilter() {
+  const select = document.getElementById('courseFilter');
+  const courses = [...new Set(allRows.map(r => r.course_interest))];
+  select.innerHTML = '<option value="">All Courses</option>' + courses.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+}
+
+function renderDashboard() {
+  const total = allRows.length;
+  const male = allRows.filter(r => r.gender === 'male').length;
+  const female = allRows.filter(r => r.gender === 'female').length;
+  const active = allRows.filter(r => (r.status || 'active') === 'active').length;
+
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card"><div class="num">${total}</div><div class="label">Total Enrollments</div></div>
+    <div class="stat-card"><div class="num">${female}</div><div class="label">Sisters / Girls</div></div>
+    <div class="stat-card"><div class="num">${male}</div><div class="label">Brothers / Boys</div></div>
+    <div class="stat-card"><div class="num">${active}</div><div class="label">Active</div></div>
+  `;
+
+  const courseCounts = {};
+  allRows.forEach(r => { courseCounts[r.course_interest] = (courseCounts[r.course_interest] || 0) + 1; });
+  const courseLabels = Object.keys(courseCounts);
+  const courseData = Object.values(courseCounts);
+  const palette = ['#d4af37','#86efac','#93c5fd','#f9a8d4','#fbbf24','#a78bfa','#fb923c','#34d399'];
+
+  if (courseChart) courseChart.destroy();
+  courseChart = new Chart(document.getElementById('courseChart'), {
+    type: 'doughnut',
+    data: { labels: courseLabels, datasets: [{ data: courseData, backgroundColor: palette, borderWidth: 0 }] },
+    options: { plugins: { legend: { labels: { color: '#c9d6d1', font: { size: 11 } } } } }
+  });
+
+  if (genderChart) genderChart.destroy();
+  genderChart = new Chart(document.getElementById('genderChart'), {
+    type: 'pie',
+    data: { labels: ['Female', 'Male'], datasets: [{ data: [female, male], backgroundColor: ['#f9a8d4', '#93c5fd'], borderWidth: 0 }] },
+    options: { plugins: { legend: { labels: { color: '#c9d6d1', font: { size: 11 } } } } }
+  });
+
+  const buckets = { 'Under 10': 0, '10-17': 0, '18+': 0, 'Unknown': 0 };
+  allRows.forEach(r => {
+    const match = String(r.student_age || '').match(/\d+/);
+    if (!match) { buckets['Unknown']++; return; }
+    const n = parseInt(match[0], 10);
+    if (n < 10) buckets['Under 10']++;
+    else if (n < 18) buckets['10-17']++;
+    else buckets['18+']++;
+  });
+  if (ageChart) ageChart.destroy();
+  ageChart = new Chart(document.getElementById('ageChart'), {
+    type: 'bar',
+    data: { labels: Object.keys(buckets), datasets: [{ data: Object.values(buckets), backgroundColor: '#d4af37', borderRadius: 8 }] },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#c9d6d1' }, grid: { display: false } },
+        y: { ticks: { color: '#c9d6d1' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+      }
+    }
+  });
+}
+
+function applyFilters() {
+  const course = document.getElementById('courseFilter').value;
+  const gender = document.getElementById('genderFilter').value;
+  const status = document.getElementById('statusFilter').value;
+  const search = document.getElementById('searchBox').value.trim().toLowerCase();
+
+  const filtered = allRows.filter(r => {
+    if (course && r.course_interest !== course) return false;
+    if (gender && r.gender !== gender) return false;
+    if (status && (r.status || 'active') !== status) return false;
+    if (search && !String(r.full_name || '').toLowerCase().includes(search)) return false;
+    return true;
+  });
+  renderTable(filtered);
+}
+
+function renderTable(rows) {
+  const tbody = document.getElementById('tableBody');
+  document.getElementById('countLabel').textContent = `Showing ${rows.length} of ${allRows.length}`;
+  if (rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="9"><div class="empty"><div class="big">No results found</div>Try a different name or clear the filters.</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(r => {
+    const status = r.status || 'active';
+    return `<tr>
+      <td class="name">${escapeHtml(r.full_name)}</td>
+      <td>${escapeHtml(r.student_age)}</td>
+      <td><span class="pill ${r.gender === 'female' ? 'female' : 'male'}">${escapeHtml(r.gender)}</span></td>
+      <td>${escapeHtml(r.course_interest)}</td>
+      <td>${escapeHtml(r.phone)}</td>
+      <td class="notes">${escapeHtml(r.notes || '—')}</td>
+      <td>${formatDate(r.created_at)}</td>
+      <td><button class="pill ${status}" onclick="toggleStatus(${r.id}, '${status}')">${status}</button></td>
+      <td><button class="del-btn" onclick="deleteRow(${r.id})">Delete</button></td>
+    </tr>`;
+  }).join('');
+}
+
+async function toggleStatus(id, currentStatus) {
+  const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+  const res = await fetch(`/api/admissions/${id}/status?password=${encodeURIComponent(savedPw)}`, {
+    method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: newStatus }),
+  });
+  if (!res.ok) return alert('Could not update status.');
+  const row = allRows.find(r => r.id === id);
+  if (row) row.status = newStatus;
+  renderDashboard(); applyFilters();
+}
+
+async function deleteRow(id) {
+  if (!confirm('Delete this enrollment permanently?')) return;
+  const res = await fetch(`/api/admissions/${id}?password=${encodeURIComponent(savedPw)}`, { method: 'DELETE' });
+  if (!res.ok) return alert('Could not delete.');
+  allRows = allRows.filter(r => r.id !== id);
+  populateCourseFilter(); renderDashboard(); applyFilters();
+}
+
+function openAddModal() { document.getElementById('addModal').classList.add('show'); }
+function closeAddModal() { document.getElementById('addModal').classList.remove('show'); }
+
+async function submitAdd() {
+  const payload = {
+    fullName: document.getElementById('addName').value,
+    studentAge: document.getElementById('addAge').value,
+    gender: document.getElementById('addGender').value,
+    courseInterest: document.getElementById('addCourse').value,
+    phone: document.getElementById('addPhone').value,
+    notes: document.getElementById('addNotes').value,
+  };
+  if (!payload.fullName || !payload.courseInterest) return alert('Name and course are required.');
+  const res = await fetch(`/api/admissions?password=${encodeURIComponent(savedPw)}`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
+  });
+  if (!res.ok) return alert('Could not add admission.');
+  closeAddModal();
+  ['addName','addAge','addCourse','addPhone','addNotes'].forEach(id => document.getElementById(id).value = '');
+  const refreshed = await fetch('/api/admissions?password=' + encodeURIComponent(savedPw));
+  const data = await refreshed.json();
+  allRows = data.results || [];
+  populateCourseFilter(); renderDashboard(); applyFilters();
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function formatDate(iso) {
+  try { return new Date(iso).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }); }
+  catch { return iso; }
+}
+</script>
+</body>
+</html>
