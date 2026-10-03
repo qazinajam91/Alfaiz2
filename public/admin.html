@@ -17,162 +17,131 @@
 
   .header { text-align: center; margin-bottom: 32px; }
   .header .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    display: inline-flex; align-items: center; gap: 6px;
     background: rgba(212,175,55,0.12);
     border: 1px solid rgba(212,175,55,0.4);
-    color: #fae29c;
-    font-size: 0.7rem;
-    padding: 5px 14px;
-    border-radius: 999px;
-    margin-bottom: 10px;
+    color: #fae29c; font-size: 0.7rem;
+    padding: 5px 14px; border-radius: 999px; margin-bottom: 10px;
   }
   .header h1 {
     font-size: 1.6rem;
     background: linear-gradient(90deg, #fae29c, #d4af37, #fae29c);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
     font-weight: 800;
   }
   .header p { color: #8fa89f; font-size: 0.85rem; margin-top: 4px; }
 
   .login-card {
-    max-width: 400px;
-    margin: 50px auto;
+    max-width: 400px; margin: 50px auto;
     background: linear-gradient(160deg, #0a4236, #042720 70%);
     border: 1px solid rgba(212,175,55,0.3);
-    border-radius: 24px;
-    padding: 36px 28px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03);
+    border-radius: 24px; padding: 36px 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
     text-align: center;
   }
   .login-icon {
-    width: 56px; height: 56px;
-    margin: 0 auto 16px;
-    border-radius: 50%;
+    width: 56px; height: 56px; margin: 0 auto 16px; border-radius: 50%;
     background: linear-gradient(135deg, #fae29c, #d4af37);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem;
+    display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
   }
   .login-card h2 { color: #fff; font-size: 1.1rem; margin-bottom: 6px; }
   .login-card p { color: #8fa89f; font-size: 0.82rem; margin-bottom: 20px; }
 
   input[type="password"] {
-    width: 100%;
-    padding: 13px 16px;
-    border-radius: 14px;
+    width: 100%; padding: 13px 16px; border-radius: 14px;
     border: 1px solid rgba(212,175,55,0.35);
-    background: #031d17;
-    color: #fff;
-    font-size: 1rem;
-    margin-bottom: 14px;
-    outline: none;
-    transition: border-color 0.2s;
+    background: #031d17; color: #fff; font-size: 1rem;
+    margin-bottom: 14px; outline: none;
   }
   input[type="password"]:focus { border-color: #d4af37; box-shadow: 0 0 0 3px rgba(212,175,55,0.15); }
 
   button {
-    width: 100%;
-    padding: 13px;
-    border-radius: 14px;
-    border: none;
-    font-weight: 700;
-    font-size: 0.95rem;
-    cursor: pointer;
+    padding: 13px; border-radius: 14px; border: none;
+    font-weight: 700; font-size: 0.9rem; cursor: pointer;
     background: linear-gradient(90deg, #fae29c, #d4af37, #c59b27);
-    color: #031d17;
-    transition: filter 0.2s, transform 0.1s;
+    color: #031d17; transition: filter 0.2s, transform 0.1s;
   }
+  button.full { width: 100%; }
   button:hover { filter: brightness(1.12); }
   button:active { transform: scale(0.98); }
 
   .error {
-    color: #ff9b9b;
-    font-size: 0.82rem;
-    margin-top: 12px;
-    background: rgba(255,0,0,0.08);
-    border-radius: 10px;
-    padding: 8px;
+    color: #ff9b9b; font-size: 0.82rem; margin-top: 12px;
+    background: rgba(255,0,0,0.08); border-radius: 10px; padding: 8px;
   }
 
   .stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 14px;
-    margin-bottom: 24px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px; margin-bottom: 20px;
   }
   .stat-card {
     background: linear-gradient(160deg, rgba(212,175,55,0.1), rgba(212,175,55,0.02));
     border: 1px solid rgba(212,175,55,0.3);
-    border-radius: 18px;
-    padding: 18px 20px;
-    position: relative;
-    overflow: hidden;
+    border-radius: 18px; padding: 16px 18px; position: relative; overflow: hidden;
   }
   .stat-card::before {
-    content: '';
-    position: absolute; top: -20px; right: -20px;
+    content: ''; position: absolute; top: -20px; right: -20px;
     width: 70px; height: 70px;
     background: radial-gradient(circle, rgba(212,175,55,0.25), transparent 70%);
   }
   .stat-card .num {
-    font-size: 1.8rem; font-weight: 800;
+    font-size: 1.6rem; font-weight: 800;
     background: linear-gradient(90deg, #fae29c, #d4af37);
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
   .stat-card .label {
-    font-size: 0.7rem; color: #8fa89f;
+    font-size: 0.68rem; color: #8fa89f;
     text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px;
+  }
+
+  .filters {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px;
+  }
+  .filters select {
+    flex: 1; min-width: 130px;
+    padding: 10px 12px; border-radius: 12px;
+    border: 1px solid rgba(212,175,55,0.3);
+    background: #042720; color: #eee; font-size: 0.85rem;
   }
 
   .table-card {
     background: linear-gradient(160deg, #0a3d31, #042720);
     border: 1px solid rgba(212,175,55,0.25);
-    border-radius: 20px;
-    overflow: hidden;
+    border-radius: 20px; overflow: hidden;
     box-shadow: 0 10px 40px rgba(0,0,0,0.35);
   }
   .table-wrap { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; }
-  th, td {
-    padding: 14px 16px;
-    text-align: left;
-    font-size: 0.82rem;
-    white-space: nowrap;
-  }
+  th, td { padding: 14px 16px; text-align: left; font-size: 0.8rem; white-space: nowrap; }
   thead th {
-    background: rgba(212,175,55,0.1);
-    color: #fae29c;
-    text-transform: uppercase;
-    font-size: 0.68rem;
-    letter-spacing: 0.05em;
+    background: rgba(212,175,55,0.1); color: #fae29c;
+    text-transform: uppercase; font-size: 0.66rem; letter-spacing: 0.05em;
     border-bottom: 1px solid rgba(212,175,55,0.25);
   }
   tbody tr { border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.15s; }
   tbody tr:last-child { border-bottom: none; }
   tbody tr:hover { background: rgba(212,175,55,0.06); }
-  td.notes { white-space: normal; max-width: 220px; color: #b9ccc5; }
+  td.notes { white-space: normal; max-width: 200px; color: #b9ccc5; }
   td.name { font-weight: 600; color: #fff; }
 
   .pill {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 999px;
-    font-size: 0.72rem;
-    font-weight: 600;
+    display: inline-block; padding: 3px 10px; border-radius: 999px;
+    font-size: 0.7rem; font-weight: 600; cursor: pointer; border: none;
   }
   .pill.female { background: rgba(244,114,182,0.15); color: #f9a8d4; }
   .pill.male { background: rgba(96,165,250,0.15); color: #93c5fd; }
+  .pill.active { background: rgba(74,222,128,0.15); color: #86efac; }
+  .pill.inactive { background: rgba(156,163,175,0.2); color: #cbd5e1; }
 
-  .footer-row {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-top: 18px;
+  .del-btn {
+    background: rgba(255,80,80,0.12); color: #ff9b9b;
+    border: 1px solid rgba(255,80,80,0.3);
+    border-radius: 10px; padding: 6px 10px; font-size: 0.75rem;
   }
-  .logout {
-    color: #8fa89f; font-size: 0.8rem; cursor: pointer; text-decoration: underline;
-  }
+  .del-btn:hover { background: rgba(255,80,80,0.22); }
+
+  .footer-row { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; }
+  .logout { color: #8fa89f; font-size: 0.8rem; cursor: pointer; text-decoration: underline; }
   .empty { text-align: center; padding: 50px 20px; color: #8fa89f; }
 </style>
 </head>
@@ -189,12 +158,29 @@
       <h2>Admin Login</h2>
       <p>Enter your password to view admissions</p>
       <input type="password" id="pw" placeholder="Admin password" />
-      <button onclick="load()">View Admissions</button>
+      <button class="full" onclick="load()">View Admissions</button>
       <div id="loginError" class="error" style="display:none;"></div>
     </div>
 
     <div id="dashView" style="display:none;">
       <div class="stats" id="statsRow"></div>
+
+      <div class="filters">
+        <select id="courseFilter" onchange="applyFilters()">
+          <option value="">All Courses</option>
+        </select>
+        <select id="genderFilter" onchange="applyFilters()">
+          <option value="">All Genders</option>
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+        </select>
+        <select id="statusFilter" onchange="applyFilters()">
+          <option value="">All Status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+
       <div class="table-card">
         <div class="table-wrap">
           <table id="dataTable">
@@ -207,6 +193,8 @@
                 <th>Phone</th>
                 <th>Notes</th>
                 <th>Date</th>
+                <th>Status</th>
+                <th></th>
               </tr>
             </thead>
             <tbody id="tableBody"></tbody>
@@ -214,13 +202,16 @@
         </div>
       </div>
       <div class="footer-row">
-        <span></span>
+        <span id="countLabel" style="color:#8fa89f; font-size:0.8rem;"></span>
         <span class="logout" onclick="logout()">Log out</span>
       </div>
     </div>
   </div>
 
 <script>
+let savedPw = '';
+let allRows = [];
+
 async function load() {
   const pw = document.getElementById('pw').value;
   const errorBox = document.getElementById('loginError');
@@ -240,38 +231,69 @@ async function load() {
       return;
     }
     const data = await res.json();
-    renderDashboard(data.results || []);
+    savedPw = pw;
+    allRows = data.results || [];
+    document.getElementById('loginView').style.display = 'none';
+    document.getElementById('dashView').style.display = 'block';
+    populateCourseFilter();
+    applyFilters();
   } catch (e) {
     errorBox.textContent = 'Something went wrong. Please try again.';
     errorBox.style.display = 'block';
   }
 }
 
-function renderDashboard(rows) {
-  document.getElementById('loginView').style.display = 'none';
-  document.getElementById('dashView').style.display = 'block';
+function populateCourseFilter() {
+  const select = document.getElementById('courseFilter');
+  const courses = [...new Set(allRows.map(r => r.course_interest))];
+  select.innerHTML = '<option value="">All Courses</option>' +
+    courses.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+}
 
-  const statsRow = document.getElementById('statsRow');
-  const total = rows.length;
-  const courseCounts = {};
-  rows.forEach(r => { courseCounts[r.course_interest] = (courseCounts[r.course_interest] || 0) + 1; });
-  const topCourse = Object.keys(courseCounts).sort((a,b) => courseCounts[b]-courseCounts[a])[0] || '—';
-  const femaleCount = rows.filter(r => r.gender === 'female').length;
+function applyFilters() {
+  const course = document.getElementById('courseFilter').value;
+  const gender = document.getElementById('genderFilter').value;
+  const status = document.getElementById('statusFilter').value;
 
-  statsRow.innerHTML = `
+  let filtered = allRows.filter(r => {
+    if (course && r.course_interest !== course) return false;
+    if (gender && r.gender !== gender) return false;
+    const rowStatus = r.status || 'active';
+    if (status && rowStatus !== status) return false;
+    return true;
+  });
+
+  renderStats();
+  renderTable(filtered);
+}
+
+function renderStats() {
+  const total = allRows.length;
+  const male = allRows.filter(r => r.gender === 'male').length;
+  const female = allRows.filter(r => r.gender === 'female').length;
+  const active = allRows.filter(r => (r.status || 'active') === 'active').length;
+
+  document.getElementById('statsRow').innerHTML = `
     <div class="stat-card"><div class="num">${total}</div><div class="label">Total Enrollments</div></div>
-    <div class="stat-card"><div class="num">${femaleCount}</div><div class="label">Sisters / Girls</div></div>
-    <div class="stat-card"><div class="num" style="font-size:1.1rem">${escapeHtml(topCourse)}</div><div class="label">Top Course</div></div>
+    <div class="stat-card"><div class="num">${female}</div><div class="label">Sisters / Girls</div></div>
+    <div class="stat-card"><div class="num">${male}</div><div class="label">Brothers / Boys</div></div>
+    <div class="stat-card"><div class="num">${active}</div><div class="label">Active</div></div>
   `;
+}
 
+function renderTable(rows) {
   const tbody = document.getElementById('tableBody');
+  document.getElementById('countLabel').textContent = `Showing ${rows.length} of ${allRows.length}`;
+
   if (rows.length === 0) {
-    document.querySelector('.table-card').innerHTML = '<div class="empty">No enrollments yet.</div>';
+    tbody.innerHTML = '<tr><td colspan="9"><div class="empty">No matching enrollments.</div></td></tr>';
     return;
   }
 
-  tbody.innerHTML = rows.map(r => `
-    <tr>
+  tbody.innerHTML = rows.map(r => {
+    const status = r.status || 'active';
+    return `
+    <tr data-id="${r.id}">
       <td class="name">${escapeHtml(r.full_name)}</td>
       <td>${escapeHtml(r.student_age)}</td>
       <td><span class="pill ${r.gender === 'female' ? 'female' : 'male'}">${escapeHtml(r.gender)}</span></td>
@@ -279,8 +301,43 @@ function renderDashboard(rows) {
       <td>${escapeHtml(r.phone)}</td>
       <td class="notes">${escapeHtml(r.notes || '—')}</td>
       <td>${formatDate(r.created_at)}</td>
+      <td><button class="pill ${status}" onclick="toggleStatus(${r.id}, '${status}')">${status}</button></td>
+      <td><button class="del-btn" onclick="deleteRow(${r.id})">Delete</button></td>
     </tr>
-  `).join('');
+  `;
+  }).join('');
+}
+
+async function toggleStatus(id, currentStatus) {
+  const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+  try {
+    const res = await fetch(`/api/admissions/${id}/status?password=${encodeURIComponent(savedPw)}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: newStatus }),
+    });
+    if (!res.ok) { alert('Could not update status.'); return; }
+    const row = allRows.find(r => r.id === id);
+    if (row) row.status = newStatus;
+    applyFilters();
+  } catch (e) {
+    alert('Something went wrong.');
+  }
+}
+
+async function deleteRow(id) {
+  if (!confirm('Delete this enrollment permanently?')) return;
+  try {
+    const res = await fetch(`/api/admissions/${id}?password=${encodeURIComponent(savedPw)}`, {
+      method: 'DELETE',
+    });
+    if (!res.ok) { alert('Could not delete.'); return; }
+    allRows = allRows.filter(r => r.id !== id);
+    populateCourseFilter();
+    applyFilters();
+  } catch (e) {
+    alert('Something went wrong.');
+  }
 }
 
 function escapeHtml(str) {
@@ -296,10 +353,12 @@ function formatDate(iso) {
 }
 
 function logout() {
+  savedPw = '';
+  allRows = [];
   document.getElementById('pw').value = '';
   document.getElementById('dashView').style.display = 'none';
   document.getElementById('loginView').style.display = 'block';
 }
 </script>
 </body>
-  </html>
+ </html>
